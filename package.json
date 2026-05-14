@@ -1,0 +1,36 @@
+{
+  "name": "personal_blog",
+  "version": "1.0.0",
+  "description": "pet project personal blog",
+  "keywords": [
+    "blog",
+    "pet",
+    "project"
+  ],
+  "homepage": "https://github.com/begleee/personal-blog#readme",
+  "bugs": {
+    "url": "https://github.com/begleee/personal-blog/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/begleee/personal-blog.git"
+  },
+  "license": "MIT",
+  "author": "begleee",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "@sequelize/postgres": "^7.0.0-alpha.48",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongodb": "^7.2.0",
+    "mongoose": "^9.6.2",
+    "nodemon": "^3.1.14",
+    "pg": "^8.20.0",
+    "sequelize": "^6.37.8"
+  }
+}
