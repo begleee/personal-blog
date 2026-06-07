@@ -7,5 +7,5 @@ exports.getAllPosts = async (req, res) => {
 
 exports.createPost = async (req, res) => {
     const post = await Post.create(req.body);
-    req.status(201).json(post);
+    res.status(201).json(post);
 }
