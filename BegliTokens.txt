@@ -1,0 +1,9 @@
+{
+    "username": "Begli",
+    "email": "beglee06@gmail.com",
+    "password": "beglilgeb@987"
+}
+
+"accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgxMDkxNTg2LCJleHAiOjE3ODEwOTI0ODZ9.AE_oCIVw7i1I_kpbJxwCf-WSn5xtmljfEPq8ClObHf8",
+
+"refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzgxMDkxNTg2LCJleHAiOjE3ODE2OTYzODZ9.ezHwn8f9207gjr7lP9ca0agq29qroM7_M19uC9B6Ey0"
