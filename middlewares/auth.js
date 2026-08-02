@@ -3,18 +3,24 @@ const Post = require('../models/Post');
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || 'super_secret_access_key';
 
 const authenticate = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    if(!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    const token = authHeader.split(' ')[1];
     try {
+        const authHeader = req.headers.authorization;
+        if(!authHeader || !authHeader.startsWith('Bearer '))
+            return res.status(401).json({ message: "Unauthorized" });
+        const token = authHeader.split(' ')[1];
         const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
-        req.body.authorId = decoded.id;
-        next();
+        req.user = decoded;
+        return next();
     } catch (error) {
-        return res.status(403).json({ message: 'Foribidden: Invalid token' });
+        if(error.name === 'TokenExpiredError') {
+            return res.status(401).json({
+                error: 'TokenExpiredError',
+                message: 'Access token has expired',
+                code: 'TOKEN_EXPIRED'
+            });
+        }
+
+        return res.status(403).json({ message: error.name });
     }
 }
 
@@ -27,9 +33,8 @@ const authorizePostAccess = async (req, res, next) => {
 
         if(!post) return res.status(404).json({ message: 'Post not found' });
 
-        if(post.authorId !== req.user.id) {
+        if(post.authorId !== req.user.id)
             return res.status(403).json( {message: 'Access denied: You do not own this post'} );
-        }
 
         next();
     } catch (error) {
@@ -38,15 +43,32 @@ const authorizePostAccess = async (req, res, next) => {
 }
 
 const authorizeAuthorAccess = async (req, res, next) => {
-    if(req.user.role === 'admin') return next();
+    try {
+        if(req.user.role === 'admin') return next();
+        return res.status(404).send(`<!DOCTYPE html>
+            <html lang="en">
 
-    const targetAuthorId = parseInt(req.params.id);
+            <head>
+                <meta charset="utf-8">
+                <title>Error</title>
+            </head>
 
-    if(targetAuthorId !== req.user.id) {
-        return res.status(403).json({ messaage: 'Access denied: You can only manage your own accaount' });
+            <body>
+                <pre>Cannot GET ${req.route.path}</pre>
+            </body>
+
+        </html>`);
+    } catch (error) {
+        return res.status(403).json({ message: error.name });
     }
-
-    next();
 };
 
-module.exports = { authenticate, authorizePostAccess, authorizeAuthorAccess };
+const authorizeUserAccess = async (req, res, next) => {
+    try {
+        if(req.user.id === req.params.id) next();
+    } catch (error) {
+        return res.status(403).json({ message: error.name });
+    }
+}
+
+module.exports = { authenticate, authorizePostAccess, authorizeAuthorAccess, authorizeUserAccess };

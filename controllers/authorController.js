@@ -5,6 +5,11 @@ exports.getAllAuthors = async (req, res) => {
     res.json(authors);
 };
 
+exports.getAuthor = async (req, res) => {
+    const author = await Author.findOne({ where: { id: req.user.id }});
+    res.json(author);
+}
+
 exports.createAuthor = async (req, res) => {
     const author = await Author.create(req.body);
     res.status(201).json(author);
